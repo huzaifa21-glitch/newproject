@@ -5,6 +5,9 @@ import axios from 'axios';
 import { useRoute } from "@react-navigation/native";
 import React, { useState, useEffect } from 'react';
 import {BackHandler} from 'react-native';
+import {AsyncStorage} from '@react-native-async-storage/async-storage';
+
+
 let globaldata =[]
 var myd={
   name:'',
@@ -18,12 +21,22 @@ var myd={
 
 export default function DisplayProf ({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
-    console.log("BEOFRE");
+    // console.log("BEOFRE");
     const route = useRoute()
     const formdata = route.params?.data1
     // console.log("Display prof "+formdata);
     // const newf = JSON.stringify(formdata);
     //   console.log('display'+newf);
+    
+//     AsyncStorage.getItem('Feed').then(item => {
+//       const list = JSON.parse(item);
+//       console.log(list);
+      
+// })
+
+
+
+
       
       const data3={
         username:   formdata
@@ -60,10 +73,12 @@ export default function DisplayProf ({navigation}) {
   useEffect(() => {
 
 
-    axios.post('http://192.168.100.2:3000/displayprof',{data3})
+    axios.post('http://192.168.18.99:3000/displayprof',{data3},{maxContentLength: 1000000})
     .then(response => {
    
-  
+  // console.log("TOP");
+  // console.log(response.data[0].description);
+  // console.log("low");
         // console.log('new resp'+JSON.stringify(response.data));
         if(response.data=="0")
         {
@@ -72,7 +87,7 @@ export default function DisplayProf ({navigation}) {
         }
         else{
   
-          console.log("DATA CUM"+response.data);
+          // console.log("DATA CUM"+response.data);
           globaldata = [...response.data];
           // console.log(globaldata);
           globaldata[0].hobbies= globaldata[0].hobbies.replace(/\n/g, '');
@@ -86,7 +101,7 @@ export default function DisplayProf ({navigation}) {
           })
           setElite(globaldata[0].elite)
  
-          // console.log(myd);
+          // console.log(globaldata[0].description);
          
           
         }
@@ -103,9 +118,11 @@ export default function DisplayProf ({navigation}) {
 
 
 
+
+
   }, []);
  
-    console.log("COMPLETED DONE");
+    // console.log("COMPLETED DONE");
     // console.log(datax.description);
    
      
@@ -135,6 +152,7 @@ const dimensions = Dimensions.get('window');
             <Text style={styles.modalText}>Contact Details!</Text>
             <Text style={styles.modalText1}>Name: {datax.name}</Text>
             <Text style={styles.modalText1}>Phone No: {datax.phoneno} </Text>
+            <Text style={styles.modalText1}>Email: {datax.email} </Text>
             
             
             <Pressable
@@ -158,13 +176,13 @@ const dimensions = Dimensions.get('window');
         <Image
           source={{
             uri:
-              'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600',
+              datax.profilepicurl,
           }}
           style={{ width: imageWidth, height: 300, borderBottomLeftRadius:50,borderBottomRightRadius:50,}}
         />
         <View style={styles.hobbiesContainer}>
-        <Text style={Globalstyles.nameText}>{datax.name} ,</Text>
-        <Text style={Globalstyles.ageText}>{datax.age+"Y"} </Text>
+        <Text style={Globalstyles.nameText}>{datax.name+","} </Text>
+        <Text style={Globalstyles.ageText}>{datax.age} </Text>
         
         </View>
         <View style={styles.workContainer}>

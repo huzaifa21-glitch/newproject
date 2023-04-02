@@ -240,7 +240,7 @@ export default function Profile1 ({navigation}) {
         <View  style={Globalstyles.droplist}>
         
         <TextInput style={Globalstyles.profInput} 
-             placeholder='Your height * (e.g. 5,11)'
+             placeholder='Your height (e.g. 5,11) *'
              value={formData.height}
               onChangeText={(text) =>
               setFormData({ ...formData, height: text })}

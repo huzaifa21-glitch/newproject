@@ -2,8 +2,6 @@ import React,{useState} from "react";
 import { View, Image, Text,TouchableWithoutFeedback, 
   Keyboard,Pressable,StyleSheet } from "react-native";
 import { Globalstyles } from "../Styles/global";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 
 

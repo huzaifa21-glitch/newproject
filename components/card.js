@@ -7,9 +7,11 @@ import { StyleSheet, View, Text, Image, TouchableOpacity,ScrollView,Alert,Modal 
 
 
 export default function MaterialCard({data,navigation} ) {
-
+  // if(data.profilepicurl!="")s
+const profilepic=data.profilepicurl
+// console.log(profilepic);
 const data1=data.username
-console.log(data1);
+// console.log(data1);
 const pressHandler = ()=>{
 navigation.navigate('Displayprof',{data1});
 }
@@ -31,13 +33,14 @@ navigation.navigate('Displayprof',{data1});
 
         </View>
         <Image
-          source={require("../assets/img1.png")}
+          // key={this.state.on}
+          source={{uri: profilepic}} 
           style={styles.cardItemImagePlace}
         ></Image>
         
       </View>
       <View style={styles.actionBody}>
-        <TouchableOpacity onPress={pressHandler} style={styles.actionButton1}>
+        <TouchableOpacity onPress={pressHandler}  style={styles.actionButton1}>
           <Text style={styles.actionText1}> Details </Text>
         </TouchableOpacity>
       </View>
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
     color: "#878787",
     lineHeight: 16,
     opacity: 1,
-    fontWeight:450
+    fontWeight:400
   },
   cardItemImagePlace: {
     backgroundColor: "#ccc",

@@ -1,14 +1,17 @@
 import React,{useState,useEffect} from "react";
 import { View, Image, Text, Button,TouchableWithoutFeedback, 
-  Keyboard,Pressable,StyleSheet } from "react-native";
+  Keyboard,Pressable,StyleSheet, Alert } from "react-native";
 import { Globalstyles } from "../Styles/global";
 import axios from 'axios';
 import {BackHandler} from 'react-native';
 
 import cloudinary from 'cloudinary-core';
 import { useRoute } from "@react-navigation/native";
+import * as ImagePicker from 'expo-image-picker';
+import { Constants, Permissions } from 'expo';
 
-const cl = new cloudinary.Cloudinary({ cloud_name: 'dahv24lxo' });
+
+const cl = new cloudinary.Cloudinary({ cloud_name: 'dvjggsoix' });
 
 
 // cloudinary.config({
@@ -36,7 +39,7 @@ export default function Profile4_img ({navigation} ) {
     console.log(newf);
     let jsonObject = JSON.parse(newf)
   
-  
+  const [iurl,setiurl]=useState('')
     let key = "name";
     let s1name = jsonObject[key];
   
@@ -97,107 +100,166 @@ export default function Profile4_img ({navigation} ) {
 
     let key19 = "hobbies";
     let hob = jsonObject[key19];
+const store=()=>{
+  if(iurl=='')
+  {
+    Alert.alert("Upload Image","Please Upload your Profile Picture for better matches!")
+  }
+  else{
+   
+  const signupData ={
+    'name': s1name,
+    'age': s1age,
+    'gender': gen,
+    'religion': rel,
+    'caste': comm,
+    'country': cntry,
+    'email': em,
+    'phoneno': num,
+    'city': cit,
+    'height': hite,
+    'work': wrk,
+    'maritalstat': marit,
+    'interests': intrst,
+    'education': edu,
+    'nickname': nick,
+    'description': descr,
+    'prefage': prage,
+    'username': usrname,
+    'password': pass,
+    'hobbies': hob,
+    'profilepicurl':iurl
+  }
+  const data2= { username: signupData.username,
+    name: signupData.name,
+    age: signupData.age,
+    gender: signupData.gender,
+    interests: signupData.interests,
+    phoneno: signupData.phoneno,
+    country: signupData.country,
+    maritalstat: signupData.maritalstat,
+    work: signupData.work,
+    prefage: signupData.prefage,
+    city: signupData.city,
+    religion: signupData.religion,
+    caste: signupData.caste,
+    height: signupData.height,
+    description: signupData.description,
+    hobbies: signupData.hobbies,
+    email: signupData.email,
+    education: signupData.education,
+    nickname: signupData.nickname,
+    profilepicurl: signupData.profilepicurl
+    
+    
+  
 
-    const pressHandler = () =>{
-        const signupData ={
-            'name': s1name,
-            'age': s1age,
-            'gender': gen,
-            'religion': rel,
-            'caste': comm,
-            'country': cntry,
-            'email': em,
-            'phoneno': num,
-            'city': cit,
-            'height': hite,
-            'work': wrk,
-            'maritalstat': marit,
-            'interests': intrst,
-            'education': edu,
-            'nickname': nick,
-            'description': descr,
-            'prefage': prage,
-            'username': usrname,
-            'password': pass,
-            'hobbies': hob
-          }
-          const data2= { username: signupData.username,
-            name: signupData.name,
-            age: signupData.age,
-            gender: signupData.gender,
-            interests: signupData.interests,
-            phoneno: signupData.phoneno,
-            country: signupData.country,
-            maritalstat: signupData.maritalstat,
-            work: signupData.work,
-            prefage: signupData.prefage,
-            city: signupData.city,
-            religion: signupData.religion,
-            caste: signupData.caste,
-            height: signupData.height,
-            description: signupData.description,
-            hobbies: signupData.hobbies,
-            email: signupData.email,
-            education: signupData.education,
-            nickname: signupData.nickname
-            
-            
-        
-        
-        };
+};
 
-          
-        //   axios.post('http://localhost:3000/adddetails', {data2} )
-        //   .then(response => {
-        //       console.log(response);
-        //   })
-        //   .catch(error => {
-        //       console.log(error);
-        //   });
+  
+  axios.post('http://192.168.18.99:3000/adddetails', {data2} )
+  .then(response => {
+      console.log(response);
+  })
+  .catch(error => {
+      console.log(error);
+  });
 
 
-          const data= { user: signupData.username,passw: signupData.password };
+  const data= { user: signupData.username,passw: signupData.password };
 
-             //ADDING LOGIN CREDENTIALS ON SIGN UP
-            // axios.post('http://localhost:3000/addtologin', {data} )
-            // .then(response => {
-            //     console.log(response);
-            // })
-            // .catch(error => {
-            //     console.log(error);
-            // });
-
-        navigation.navigate('Signin')
-        
-      }
-      const [image, setImage] = useState(null);
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+    //  ADDING LOGIN CREDENTIALS ON SIGN UP
+    axios.post('http://192.168.18.99:3000/addtologin', {data} )
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
     });
+    Alert.alert("Signup Sucessfull! ","Please with in with Credentials!")
 
-    if (!result.cancelled) {
-      // Upload the selected image to Cloudinary
-      const formData = new FormData();
-      formData.append('file', {
-        uri: result.uri,
-        name: 'image.jpg',
-        type: 'image/jpeg',
-      });
-      formData.append('upload_preset', 'your_upload_preset');
-      const response = await fetch(`https://api.cloudinary.com/v1_1/dahv24lxo/image/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
+navigation.navigate('Signin')
+  
 
-      setImage(data.secure_url);
+}
+}
+
+
+
+
+
+    const  [cameraPermission, setCameraPermission] = useState('')
+    const  [galleryPermission, setGalleryPermission] = useState('')
+    const  [image, setImage] = useState('')
+    const requestPermissions = async () => {
+      try {
+        const {
+          status,
+        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        console.log('status lib', status);
+        setGalleryPermission('granted');
+      } catch (error) {
+        console.log('error', error);
+      }
+      try {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        console.log('status camera', status);
+        setCameraPermission('granted');
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+    
+    useEffect(() => {
+      requestPermissions();
+    }, []);
+  
+  
+
+
+    const pickImage = async ()=> {
+   if(galleryPermission == 'granted')
+   {
+    let data =  await ImagePicker.launchImageLibraryAsync({
+      mediaTypes:ImagePicker.MediaTypeOptions.Images,
+      allowsEditing:true,
+      aspect:[1,1],
+      quality:0.5
+  })
+  if(!data.cancelled){
+      let newfile = { 
+        uri:data.uri,
+        type:`test/${data.uri.split(".")[1]}`,
+        name:`test.${data.uri.split(".")[1]}` 
+        
     }
-  };
+      handleUpload(newfile)
+  }
+   }
+  }
+  
+  const handleUpload = (image1)=>{
+
+    const data = new FormData()
+    data.append('file',image1)
+    data.append('upload_preset','profilepics')
+    data.append("cloud_name","dvjggsoix")
+  
+    fetch("https://api.cloudinary.com/v1_1/dvjggsoix/image/upload",{
+        method:"post",
+        body:data
+    }).then(res=>res.json()).
+    then(data=>{
+        // setPicture(data.assets[0].url)
+        // setModal(false)
+        // console.log("IMAGE URL IS");
+        setiurl(data.url)
+    }).catch(err=>{
+       console.log("error while uploading "+err)
+    })
+  }
+
+  
 
 
 
@@ -223,7 +285,7 @@ export default function Profile4_img ({navigation} ) {
             style={Globalstyles.image}></Image>
              <Button title="Pick an image from camera roll" onPress={pickImage}/>
             {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-            <Pressable style={Globalstyles.profButton} onPress={pressHandler}>
+            <Pressable style={Globalstyles.profButton} onPress={store}>
               <Text style={Globalstyles.buttontext}>Submit</Text>
             </Pressable>
             </View>

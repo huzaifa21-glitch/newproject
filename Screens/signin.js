@@ -9,7 +9,6 @@ import React,{useState,useEffect} from "react";
   
   
   
-  
   export default function Signin ({navigation}) {
 
     // useEffect(() => {
@@ -76,6 +75,9 @@ import React,{useState,useEffect} from "react";
               password: formData.password
               
             }
+            
+            
+
   axios.post('http://192.168.18.99:3000/checkcredentials', {data1} )
   .then(response => {
    

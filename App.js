@@ -32,11 +32,38 @@ import Feed from './Screens/Feed';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+export default function App() {
+
+  // const myConstant = this.props.navigation.getParam('myConstant');
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Tabs"
+          screenOptions={{
+            headerShown: false,
+        }}
+      >
+        
+        <Stack.Screen name="Tabs" component={Tabs} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    // <Signup1></Signup1>
+  );
+}
 
 
 
 const Tabs = () => {
+  
+  const data3={
+    "username":"xx","password":"123","confirmPassword":"","errors":{}
+    
+  };
+  function handleRefresh() {
+    this.forceUpdate();
+  }
+  // 
   return (
+    
       <Drawer.Navigator useLegacyImplementation={true}>
           <Drawer.Screen
               name='First'
@@ -137,11 +164,19 @@ const Tabs = () => {
           <Drawer.Screen
               name='Displayprof'
               component={DisplayProf}
-              options={({navigation, route}) => ({
+              options={({navigation, route}) => (  
+              {
+                
+
+                headerTintColor: '#FFF',
+                headerStyle: {
+                  backgroundColor: '#EF3D4E'},
                 headerLeft: (props) => (
                   <HeaderBackButton
                     {...props}
-                    onPress={() => navigation.navigate('Feed')}
+                  
+                    onPress={() => navigation.navigate(('Feed'),{data3})}
+                    onPressIn={handleRefresh}
                   />
                 ),
                 drawerItemStyle: { display: 'none' },
@@ -187,22 +222,6 @@ const Tabs = () => {
   );
 }
 
-export default function App() {
 
-  
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Tabs"
-          screenOptions={{
-            headerShown: false,
-        }}
-      >
-        
-        <Stack.Screen name="Tabs" component={Tabs} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    // <Signup1></Signup1>
-  );
-}
 
 

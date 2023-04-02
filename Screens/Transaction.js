@@ -40,7 +40,7 @@ const data1={
 }
 function handle({navigation}){
   console.log(data1);
-  axios.post('http://192.168.1.2:3000/verifytrans',{data1})
+  axios.post('http://192.168.18.99:3000/verifytrans',{data1})
   .then(response => {
 
       // console.log('new resp'+JSON.stringify(response.data));
@@ -48,7 +48,6 @@ function handle({navigation}){
       console.log("RES IS: "+response.data);
 if(response.data=='00')
 {
-  console.log("SAHIU CHAL RHI");
   Alert.alert("Invalid Username","Please Enter Valid Username")
 }
 else if(response.data=='0')

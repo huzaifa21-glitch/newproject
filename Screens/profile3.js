@@ -7,7 +7,7 @@ import React,{useState,useEffect} from "react";
   import { useRoute } from "@react-navigation/native";
   
   const randomNum = Math.floor(Math.random() * 99999);
-    console.log('Random number:', randomNum);
+    // console.log('Random number:', randomNum);
   
   export default function Profile3 ({navigation}) {
     

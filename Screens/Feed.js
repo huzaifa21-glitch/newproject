@@ -5,23 +5,23 @@ import axios from 'axios';
 import { useRoute } from "@react-navigation/native";
 import MaterialCard from '../components/card';
 import {BackHandler} from 'react-native';
+import {AsyncStorage} from '@react-native-async-storage/async-storage';
 
-
-
-let globaldata =[]
 let globalusername=''
+let globaldata =[]
+
 axios.post('http://192.168.18.99:3000/card')
   .then(response => {
 
       // console.log('new resp'+JSON.stringify(response.data));
       
-      console.log(response.data[2]);
+      // console.log(response.data[2]);
 
       // const data = JSON.stringify(response);
-      console.log(response.data.length);
+      // console.log(response.data.length);s
        globaldata = [...response.data];
        
-       console.log(globaldata);
+      //  console.log(globaldata);
       
   })
   .catch(error => {
@@ -30,7 +30,7 @@ axios.post('http://192.168.18.99:3000/card')
  
 export default function Feed({navigation}) {
 
-
+// const [globalusername,setun]=useState('')
   useEffect(() => {
 
     const backHandler = BackHandler.addEventListener(
@@ -44,27 +44,36 @@ export default function Feed({navigation}) {
   
   // const [value, setValue] = myState;
 console.log(globaldata);
- 
-  // const route = useRoute()
-  // const formdata = route.params?.formData
-  // const newf = JSON.stringify(formdata);
-  //   console.log(newf);
-  //   let jsonObject = JSON.parse(newf);
-  //   let key = "username";
-  //   globalusername = jsonObject[key];
+
+
+  const route = useRoute()
+  const formdata = route.params?.formData;
+  const newf = JSON.stringify(formdata);
+  let jsonObject;
+
+if(newf!= null){
+   jsonObject = JSON.parse(newf);
+   let key = "username";
+  globalusername=jsonObject[key];
+}
+    console.log('newf'+newf);
+  //   
+  // AsyncStorage.setItem('Displayprof',JSON.stringify({formdata}));
+
+  console.log('username: '+globalusername);
    
     // var abc=globalusername;
     
-     console.log('Glovaluser:' + globalusername);
+    //  console.log('Glovaluser:' + globalusername);
+    // globaldata=globaldata.reverse()
     for(let i=0;i<globaldata.length;i++)
     {
       if(globaldata[i].username==globalusername)
       {
-        // globaldata=globaldata.splice(i,1)
-        // console.log("UPDATED GLOBAL DATA"+ globaldata);
+       globaldata.splice(i,1)
       }
     }
-    // console.log(globaldata);
+    console.log(globaldata);
   return (
     
     <View style={styles.body}>  
@@ -118,7 +127,7 @@ paddingBottom: 6,
 paddingTop: 6,
 paddingLeft: 7,
 borderRadius:25,
-fontWeight: "500",
+// fontWeight: "500",
   color: "#FFFFFF",
   opacity: 1,
 

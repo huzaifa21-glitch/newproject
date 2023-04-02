@@ -1,5 +1,5 @@
-import React,{useEffect}from "react";
-import { StyleSheet, View, Text,Pressable } from "react-native";
+import React,{useEffect,useState}from "react";
+import { StyleSheet, View, Text,Pressable,Modal } from "react-native";
 import MaterialButtonPink from "../components/matbutton";
 import { ScrollView } from "react-native-gesture-handler";
 import { Globalstyles } from '../Styles/global';
@@ -7,7 +7,7 @@ import {BackHandler} from 'react-native';
 
 
 export default function Payment(props) {
-
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
 
     const backHandler = BackHandler.addEventListener(
@@ -23,6 +23,35 @@ export default function Payment(props) {
   return (
   <ScrollView>
     <View style={styles.container}>
+      
+<Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Easypaisa Details!</Text>
+            <Text style={styles.modalText2}>Account Number: +92-3311175552</Text>
+            <Text style={styles.modalText3}>Account Title: MOHI UD DIN </Text>
+            <Text style={styles.modalText1}>Please Verify your payment after deposit in Verify Payment Section  </Text>
+            
+            
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                setModalVisible(!modalVisible)
+                
+              }}>
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+    
       <Text style={styles.titletext}>MONTHLY PLAN</Text>
       <Text style={styles.offertext}>
         REGULAR PRICE: {"\t"}200 PKR{"\n"}OFFER PRICE:{"\t"} 100 PKR
@@ -70,6 +99,78 @@ export default function Payment(props) {
 }
 
 const styles = StyleSheet.create({
+  
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+    width: 70
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize:25,
+    fontWeight:'700',
+    color:"#018749"
+
+  },
+  modalText2: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize:16,
+    fontWeight:'500',
+
+  },
+  modalText3: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize:16,
+    fontWeight:'500',
+
+  },
+  modalText1: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize:16,
+    color:'#AA0000',
+    fontWeight:'700',
+
+
+  },
+
   container: {
     flex: 1,
     alignItems:'center'
