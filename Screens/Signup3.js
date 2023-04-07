@@ -152,9 +152,6 @@ export default function Signup3 ({navigation} ) {
             </Pressable>
             </View>
 
-            <Text style={styles.accText}>By creating the account, you agree</Text>
-            <Text style={styles.secText}> to our privacy policy and T&C.</Text>
-
           </View>
     </View>
     </TouchableWithoutFeedback>

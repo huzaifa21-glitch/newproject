@@ -20,7 +20,7 @@ var myd={
   city: ""
 }
 
-export default function DisplayProf ({navigation}) {
+export default function DisplayProf2 ({navigation}) {
   const sendWhatsAppMessage = (phoneNumber) => {
     const message = 'Hello, how are you?';
     const url = `whatsapp://send?phone=${phoneNumber}&text=${message}`;
@@ -37,45 +37,18 @@ export default function DisplayProf ({navigation}) {
     const route = useRoute()
     const formdata = route.params?.data1.username
     const signinuser = route.params?.data1.sign
-    console.log(signinuser);
     
-    const data2= { 
-      signinusername: signinuser,
-      username:myd.username,
-      name: myd.name,
-      age: myd.age,
-      gender: myd.gender,
-      interests: myd.interests,
-      phoneno: myd.phoneno,
-      country: myd.country,
-      maritalstat: myd.maritalstat,
-      work: myd.work,
-      prefage: myd.prefage,
-      city: myd.city,
-      religion: myd.religion,
-      caste: myd.caste,
-      height: myd.height,
-      description: myd.description,
-      hobbies: myd.hobbies,
-      email: myd.email,
-      education: myd.education,
-      nickname: myd.nickname,
-      profilepicurl: myd.profilepicurl,
-      elite:myd.elite
-      
-      
-    
-  
-  };
-  console.log('data2: '+data2.caste);
+   
 
 
-      //card username
+      
       const data3={
-        username:   formdata
+        username:   formdata,
+        signin: signinuser
         
       }
-     
+      console.log('d2: '+data3.signin);
+
   //   render() {
     useEffect(() => {
 
@@ -164,7 +137,6 @@ export default function DisplayProf ({navigation}) {
 
   
 const dimensions = Dimensions.get('window');
-const newW = Dimensions.get('window').width;
     const imageWidth = dimensions.width;
 
     return (
@@ -241,10 +213,10 @@ const newW = Dimensions.get('window').width;
         <View style={styles.actionBody}>
         <Pressable  style={styles.profButton}  onPress={() => {
 
-          axios.post('http://average-cape-dove.cyclic.app/addfavourites', {data2} )
+          axios.post('http://average-cape-dove.cyclic.app/deleteCard', {data3} )
           .then(response => {
               console.log(response);
-              alert("Added To Favourites!")
+              alert("Deleted from Favourites!")
           })
           .catch(error => {
               console.log(error);
@@ -252,9 +224,10 @@ const newW = Dimensions.get('window').width;
           });
           
         }} >
-          <Text style={styles.actionText1}> ⭐ </Text>
+          <Text style={styles.actionText1}> ❌ </Text>
         </Pressable>
       </View>
+        
         </View>
         <View style={styles.workContainer}>
         <Image source={require("../assets/work.png")}
@@ -366,21 +339,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#006A4E',
     marginTop:10
   },
-  profButton:{
-  
-    borderRadius: 100,
-    width:50,
-    elevation: 1,
-    backgroundColor: '#EF3D4E',
-    },
-    actionBody:{
-      flex:1,
-      flexDirection:'row',
-      // alignContent:'flex-end',
-      justifyContent:'flex-end',
-      // alignItems:'flex-',
-      marginRight:20
-    },
+
 
   centeredView: {
     flex: 1,
@@ -508,7 +467,7 @@ const styles = StyleSheet.create({
 },
 actionText1: {
   fontSize: 16,
-  // backgroundColor: '#EF3D4E',
+  backgroundColor: '#333',
 paddingRight: 7,
 paddingBottom: 6,
 
@@ -519,7 +478,17 @@ fontWeight: "500",
   color: "#FFFFFF",
   opacity: 1,
 
-alignSelf:'center'
+alignItems:'flex-end',
+alignSelf:'flex-end'
   
 },
+
+    actionBody:{
+      flex:1,
+      flexDirection:'row',
+      // alignContent:'flex-end',
+      justifyContent:'flex-end',
+      // alignItems:'flex-',
+      marginRight:20
+    },
 });

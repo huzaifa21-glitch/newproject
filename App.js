@@ -25,6 +25,12 @@ import DisplayProf from './Screens/displayprof';
 // import AppLoading from 'expo-app-loading';
 // import Navigator from './Routes/drawer';
 import Feed from './Screens/Feed';
+import { useNavigation } from '@react-navigation/native';
+import Feed2 from './Screens/Feed2';
+import DisplayProf2 from './Screens/displayprof2';
+
+
+
 
 
 
@@ -32,9 +38,39 @@ import Feed from './Screens/Feed';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+
+const TAB_TO_RESET = 'First';
+const resetHomeStackOnTabPress = ({ navigation, route }) => ({
+  tabPress: (e) => {
+    const state = navigation.dangerouslyGetState();
+
+    if (state) {
+      // Grab all the tabs that are NOT the one we just pressed
+      const nonTargetTabs = state.routes.filter((r) => r.key !== e.target);
+
+      nonTargetTabs.forEach((tab) => {
+        // Find the tab we want to reset and grab the key of the nested stack
+        const tabName = tab?.name;
+        const stackKey = tab?.state?.key;
+
+        if (stackKey && tabName === TAB_TO_RESET) {
+          // Pass the stack key that we want to reset and use popToTop to reset it
+          navigation.dispatch({
+            ...StackActions.popToTop(),
+            target: stackKey,
+          });
+        }
+      });
+    }
+  },
+});
+
+
 export default function App() {
 
-  // const myConstant = this.props.navigation.getParam('myConstant');
+ 
+
+  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Tabs"
@@ -161,8 +197,21 @@ const Tabs = () => {
                   
               }}
           />
+           <Drawer.Screen
+              name='Feed2'
+              component={Feed2}
+              options={{
+                title: 'Favourites',
+                headerTintColor: '#FFF',
+                headerStyle: {
+                  backgroundColor: '#EF3D4E'},
+                  unmountOnBlur: true
+                  
+              }}
+          />
           <Drawer.Screen
               name='Displayprof'
+              
               component={DisplayProf}
               options={({navigation, route}) => (  
               {
@@ -176,7 +225,29 @@ const Tabs = () => {
                     {...props}
                   
                     onPress={() => navigation.navigate(('Feed'),{data3})}
-                    onPressIn={handleRefresh}
+                    // onPressIn={handleRefresh}
+                  />
+                ),
+                drawerItemStyle: { display: 'none' },
+                unmountOnBlur: true
+           })}
+          />
+           <Drawer.Screen
+              name='Displayprof2'
+              component={DisplayProf2}
+              options={({navigation, route}) => (  
+              {
+                
+
+                headerTintColor: '#FFF',
+                headerStyle: {
+                  backgroundColor: '#EF3D4E'},
+                headerLeft: (props) => (
+                  <HeaderBackButton
+                    {...props}
+                  
+                    onPress={() => navigation.navigate(('Feed2'),{data3})}
+                    // onPressIn={handleRefresh}
                   />
                 ),
                 drawerItemStyle: { display: 'none' },
@@ -212,16 +283,16 @@ const Tabs = () => {
           <Drawer.Screen
               name='Log Out'
               component={First}
+              listeners={resetHomeStackOnTabPress}
               options={{
                 headerShown: false,
-                // drawerItemStyle: { display: 'none' },
+               
                 unmountOnBlur: true
+                
               }}
           />
       </Drawer.Navigator>
   );
 }
-
-
 
 

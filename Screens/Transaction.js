@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { StyleSheet, View, Text ,TextInput,Pressable, Alert,Keyboard,TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View, Text ,ActivityIndicator,TextInput,Pressable, Alert,Keyboard,TouchableWithoutFeedback } from "react-native";
 import { Globalstyles } from "../Styles/global";
 import MaterialButtonDanger from "../components/matbutton";
 import axios from 'axios';
@@ -30,6 +30,7 @@ export default function Transaction(props) {
     });
     
   const [username1,setuser]=useState()
+  const [verify,setverify]=useState('Verify')
   const [id1,setid]=useState()
   // console.log(username);
   
@@ -39,8 +40,8 @@ const data1={
   
 }
 function handle({navigation}){
-  console.log(data1);
-  axios.post('http://192.168.18.99:3000/verifytrans',{data1})
+  setverify('Please Wait..')
+  axios.post('https://average-cape-dove.cyclic.app/verifytrans',{data1})
   .then(response => {
 
       // console.log('new resp'+JSON.stringify(response.data));
@@ -48,21 +49,26 @@ function handle({navigation}){
       console.log("RES IS: "+response.data);
 if(response.data=='00')
 {
-  Alert.alert("Invalid Username","Please Enter Valid Username")
+  Alert.alert("Invalid Username/TRX ID","Please Enter Valid Username and TRX ID")
+  setverify('Verify')
 }
 else if(response.data=='0')
 {
-  Alert.alert("No Transaction Found!","Please Make Sure you have done the transaction and entered correct TRX ID")
+  Alert.alert("No Transaction Found!","It takes 24Hours to verify your trasaction! Try Again Later!")
+  setverify('Verify')
 }
 else if(response.data=='1')
 {
   Alert.alert("Verification Sucessfull!","Your Transation has been verified Sucessfully now you can acesss all the details! Thanks!")
+  setverify('Verify')
   navigation.navigate('Feed');
+ 
 
 }
 else
 {
   Alert.alert("Network Error!","Cant connect to Server!")
+  setverify('Verify')
 }
 
 
@@ -105,7 +111,7 @@ else
       {/* <Text style={styles.easypaisaAccount}>EASYPAISA ACCOUNT</Text> */}
       <View style={Globalstyles.imgcontainer}>
               <Pressable style={Globalstyles.profButton}  onPress={handle} >
-                <Text style={Globalstyles.buttontext}>Verify </Text>
+                <Text style={Globalstyles.buttontext}>{verify} </Text>
               </Pressable>
               </View>
     </View>

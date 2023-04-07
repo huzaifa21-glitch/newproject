@@ -1,28 +1,22 @@
 import React,{useState,useEffect} from "react";
   import { View,Alert, Image, Text, Button,TouchableWithoutFeedback, 
-    Keyboard,Pressable,StyleSheet } from "react-native";
+    Keyboard,Pressable,StyleSheet,ActivityIndicator } from "react-native";
     import { Globalstyles } from "../Styles/global";
+    import { Constants, Permissions } from 'expo';
 
     import {BackHandler} from 'react-native';
   import { TextInput } from "react-native";
   import axios from 'axios';
-  
+  import * as Contacts from 'expo-contacts';
+
   
   
   export default function Signin ({navigation}) {
+ 
 
-    // useEffect(() => {
 
-    //   const backHandler = BackHandler.addEventListener(
-    //           'hardwareBackPress',
-    //           () => {
-    //             return true;
-    //           },
-    //         );
-    //         return () => backHandler.remove();
-    //   });
-  
-
+    const [text1,setText] = useState('Sign in');
+ 
 
 
     var err=0;
@@ -66,7 +60,7 @@ import React,{useState,useEffect} from "react";
       const handleSubmit = () => {
       //  validateForm();
       
-       
+       setText("Please Wait")
     
         if (err == 0) {
            
@@ -75,27 +69,51 @@ import React,{useState,useEffect} from "react";
               password: formData.password
               
             }
-            
-            
+            // console.log(cont);
 
-  axios.post('http://192.168.18.99:3000/checkcredentials', {data1} )
-  .then(response => {
-   
-    if(response.data=='1')
-    {
+            const storeData = async (value) => {
+              try {
+                if(value!=null || value!=''){
+                await AsyncStorage.setItem('@signinuser1', value)
+                // console.log("UserName Storeds"+value);
+              }
+              } catch (e) {
+                console.log("USERNAME empty"+ e);
+              }
+            
+            storeData(data1.username)
+            console.log(); 
+            }     
+
+
+
+            axios.post('http://average-cape-dove.cyclic.app/checkcredentials', {data1} )
+        .then(response => {
+         
+          if(response.data=='1')
+          {
+            setText("Sign In")
+            navigation.navigate('Feed',{formData});
+          }
+          else{
+            setText("Sign In")
+            console.log("AUTHENTICATION FAIL SHOW ALERT ");
+            alert("Invalid Credentials !","Please Enter Valid Username and Password")
+          }
+          
+        })
+        .catch(error => {
+          setText("Sign In")
+          alert("Network Error !","Cant Connect To Server")
+          
+          console.log(error);
+        });
       
-      navigation.navigate('Feed',{formData});
-    }
-    else{
-      console.log("AUTHENTICATION FAIL SHOW ALERT ");
-      Alert.alert("Invalid Credentials !","Please Enter Valid Username and Password")
-    }
-    
-  })
-  .catch(error => {
-    console.log(error);
-  });
+            
+           
 
+
+ 
 
             setHasErrors(false);
             // navigation.navigate('Feed');
@@ -107,7 +125,15 @@ import React,{useState,useEffect} from "react";
             setHasErrors(true);
         }
       };
+     
 
+
+
+  
+        
+ 
+      
+      
 
    
     return(
@@ -152,6 +178,7 @@ import React,{useState,useEffect} from "react";
                ></TextInput>
                {formData.errors.password && <Text style={Globalstyles.errortext}>{formData.errors.password}</Text>}
 
+           
 
               {/* {hasErrors && <Text>Please fix the errors above</Text>} */}
                 </View>
@@ -160,7 +187,7 @@ import React,{useState,useEffect} from "react";
   
               <View style={Globalstyles.imgcontainer}>
               <Pressable style={Globalstyles.profButton}  onPress={handleSubmit} >
-                <Text style={Globalstyles.buttontext}>Continue</Text>
+                <Text style={Globalstyles.buttontext}>{text1}</Text>
               </Pressable>
               </View>
   
@@ -180,10 +207,10 @@ import React,{useState,useEffect} from "react";
         fontSize:18,
         borderRadius:6, 
         width:150,
-      },
-     
-  
-    });
+      }
+
+
+});
 
 
 

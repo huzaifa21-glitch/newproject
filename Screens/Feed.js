@@ -1,34 +1,22 @@
 
-import { StyleSheet, Text, View,Image,ScrollView,Pressable} from 'react-native';
+import { StyleSheet, Text, View,Image,ScrollView,Pressable,ActivityIndicator} from 'react-native';
 import React,{ useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRoute } from "@react-navigation/native";
 import MaterialCard from '../components/card';
 import {BackHandler} from 'react-native';
-import {AsyncStorage} from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
-let globalusername=''
+let globalusername=null
+let globalusername1=null
 let globaldata =[]
 
-axios.post('http://192.168.18.99:3000/card')
-  .then(response => {
-
-      // console.log('new resp'+JSON.stringify(response.data));
-      
-      // console.log(response.data[2]);
-
-      // const data = JSON.stringify(response);
-      // console.log(response.data.length);s
-       globaldata = [...response.data];
-       
-      //  console.log(globaldata);
-      
-  })
-  .catch(error => {
-      console.log(error);
-});
  
 export default function Feed({navigation}) {
+  
+  
+
 
 // const [globalusername,setun]=useState('')
   useEffect(() => {
@@ -43,9 +31,9 @@ export default function Feed({navigation}) {
     });
   
   // const [value, setValue] = myState;
-console.log(globaldata);
+// console.log(globaldata);
 
-
+try{
   const route = useRoute()
   const formdata = route.params?.formData;
   const newf = JSON.stringify(formdata);
@@ -56,24 +44,88 @@ if(newf!= null){
    let key = "username";
   globalusername=jsonObject[key];
 }
-    console.log('newf'+newf);
-  //   
-  // AsyncStorage.setItem('Displayprof',JSON.stringify({formdata}));
 
-  console.log('username: '+globalusername);
-   
-    // var abc=globalusername;
+
+
+
+console.log('Signin user name: '+globalusername);
+const storeData = async (value) => {
+  try {
+    if(value!=null || value!=''){
+    await AsyncStorage.setItem('@signinuser', value)
+    // console.log("UserName Storeds"+value);
+  }
+  } catch (e) {
+    console.log("USERNAME empty"+ e);
+  }
+}
+storeData(globalusername)
+console.log();
+
+
+
+  }
+  catch(e){
+    console.log("USERNAME UNDEFINED");
+  }
+  
+  
+  const dataz={
+    usr: globalusername
+  }
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+
+  
+  useEffect(() => {
     
-    //  console.log('Glovaluser:' + globalusername);
-    // globaldata=globaldata.reverse()
-    for(let i=0;i<globaldata.length;i++)
-    {
-      if(globaldata[i].username==globalusername)
-      {
-       globaldata.splice(i,1)
+    axios.post('http://average-cape-dove.cyclic.app/card',{dataz})
+  .then(response => {
+  
+      // console.log('new resp'+JSON.stringify(response.data));
+      
+      // console.log(response.data[2]);
+  
+      // const data4 = JSON.stringify(response.data);
+      // console.log(response.data.length);s
+       globaldata = [...response.data];
+       setIsLoading(false);
+       
+  })
+  .catch(error => {
+      console.log(error);
+      setIsLoading(false);
+
+  });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  
+
+  const getData = async (a) => {
+    try {
+      const value = await AsyncStorage.getItem('@signinuser')
+      if(value !== null) {
+        // console.log("USERNAME FROM STORAGE IS: "+value);
+        globalusername=value
       }
+      // console.log(value);
+      globalusername=value
+    } catch(e) {
+      console.log("SORRY ");
     }
-    console.log(globaldata);
+  }
+  getData("p");
+  
+
+
   return (
     
     <View style={styles.body}>  
@@ -88,14 +140,7 @@ if(newf!= null){
       <MaterialCard data={item} navigation={navigation}/>
     ))}
 
-  
-  
-       
-      
 
-  {/* <MaterialCard12 data={''} />
-  <MaterialCard12 data={''} />
-  <MaterialCard12  data={''}/> */}
   </ScrollView>
 
   </View> 

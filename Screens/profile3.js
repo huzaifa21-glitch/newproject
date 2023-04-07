@@ -6,7 +6,7 @@ import React,{useState,useEffect} from "react";
   import {BackHandler} from 'react-native';
   import { useRoute } from "@react-navigation/native";
   
-  const randomNum = Math.floor(Math.random() * 99999);
+  const randomNum = Math.floor(Math.random() * 999);
     // console.log('Random number:', randomNum);
   
   export default function Profile3 ({navigation}) {
@@ -226,6 +226,9 @@ import React,{useState,useEffect} from "react";
 
 
               {/* {hasErrors && <Text>Please fix the errors above</Text>} */}
+                   
+            <Text style={styles.accText}>By creating the account, you agree</Text>
+            <Text style={styles.secText}> to our privacy policy and T&C.</Text>
                 </View>
                 
               
@@ -253,7 +256,18 @@ import React,{useState,useEffect} from "react";
         borderRadius:6, 
         width:150,
       },
-     
+      secText:{
+          textAlign:'center',
+          fontSize:18,
+          
+  
+      },
+      accText:{
+          marginTop:15,
+          textAlign:'center',
+          fontSize:18,
+          
+      },
   
     });
     

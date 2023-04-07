@@ -39,7 +39,7 @@ const pressHandler = ()=>{
     sign: signinuser
   }
 
-navigation.navigate('Displayprof',{data1});
+navigation.navigate('Displayprof2',{data1});
 }
   return (
     
@@ -51,8 +51,9 @@ navigation.navigate('Displayprof',{data1});
       
       <View style={styles.cardBody}>
         <View style={styles.bodyContent}>
+            {/* <Text>Display 2</Text> */}
           <Text style={styles.titleStyle}>{data.name}</Text>
-          <Text style={styles.subtitleStyle}>{'Age: '+data.age}</Text>
+          <Text style={styles.subtitleStyle}>{'Age2: '+data.age}</Text>
           <Text style={styles.subtitleStyle}>{'Height: '+data.height}</Text>
           <Text style={styles.subtitleStyle}>{'Education: '+data.education}</Text>
           <Text style={styles.subtitleStyle}>{'Work: '+data.work}</Text>
